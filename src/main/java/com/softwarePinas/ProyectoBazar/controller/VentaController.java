@@ -1,12 +1,13 @@
 package com.softwarePinas.ProyectoBazar.controller;
 
-import com.softwarePinas.ProyectoBazar.model.Cliente;
+import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
 import com.softwarePinas.ProyectoBazar.model.Venta;
 import com.softwarePinas.ProyectoBazar.service.IVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,4 +50,18 @@ public class VentaController {
     public void updateVenta(@RequestBody Venta venta){
         ventaService.updateVenta(venta);
     }
+
+    @GetMapping("/productos/{codigo_venta}")
+    public Optional<Venta> getProductosBySale(@PathVariable Long codigo_venta){
+        Optional<Venta> ventas  = ventaService.findVentaById(codigo_venta);
+        return ventas;
+    }
+
+    @GetMapping("/fecha/{fecha_venta}")
+    public VentaPorFechaDTO findByFechaVenta(@PathVariable LocalDate fecha_venta){
+        VentaPorFechaDTO venta = ventaService.ventasPorFecha(fecha_venta);
+        return venta;
+    }
+
+
 }
