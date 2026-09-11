@@ -38,4 +38,10 @@ public class ProductoService implements IProductoService {
     public void updateProduct(Producto producto) {
         productRepository.save(producto);
     }
+
+    @Override
+    public List<Producto> productosMenor5(){
+        return productRepository.findByCantidadDisponibleLessThan(5);
+    }
+
 }

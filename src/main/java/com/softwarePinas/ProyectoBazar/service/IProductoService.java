@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface IProductoService {
 
+
     public Producto addProduct(Producto producto);
 
     public List<Producto> findAllProducts();
@@ -16,5 +17,8 @@ public interface IProductoService {
     public void deleteProductById(Long id);
 
     public void updateProduct(Producto producto);
+
+    //CantidadMenor5
+    public List<Producto> productosMenor5();
 
 }

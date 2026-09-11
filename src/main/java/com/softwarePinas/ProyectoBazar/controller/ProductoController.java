@@ -14,6 +14,8 @@ import java.util.Optional;
 public class ProductoController {
     @Autowired
     private IProductoService productoService;
+
+
     //Create
     @PostMapping("/crear")
     public ResponseEntity<Producto> createProduct(@RequestBody Producto producto){
@@ -42,4 +44,10 @@ public class ProductoController {
     public void updateProducto(@RequestBody Producto producto){
         productoService.updateProduct(producto);
     }
+
+    @GetMapping("/falta_stock")
+    public List<Producto> productosMenor5(){
+        return productoService.productosMenor5();
+    }
+
 }
