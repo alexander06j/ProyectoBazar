@@ -7,26 +7,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
+@Setter
 @Entity
-public class Venta {
+public class DetalleVenta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long codigo_venta;
-    private LocalDate fecha_venta;
-    private BigDecimal total;
+    private Long id_detalle;
+    private Integer cantidad;
+    private BigDecimal precio_unitario;
+    private BigDecimal subtotal;
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id")
-    private Cliente cliente;
+    @JoinColumn(name = "venta_id")
+    private Venta venta;
 
-    @OneToMany(mappedBy = "venta")
-    private List<DetalleVenta> listaDetalles;
-
+    @ManyToOne
+    @JoinColumn(name = "producto_id")
+    private Producto producto;
 }
