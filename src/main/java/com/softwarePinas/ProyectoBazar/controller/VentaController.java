@@ -1,5 +1,6 @@
 package com.softwarePinas.ProyectoBazar.controller;
 
+import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
 import com.softwarePinas.ProyectoBazar.model.Venta;
 import com.softwarePinas.ProyectoBazar.service.IVentaService;
@@ -63,5 +64,9 @@ public class VentaController {
         return venta;
     }
 
+    @GetMapping("/mayor_venta")
+    public MayorVentaDTO ventaMayorMonto(){
+        return ventaService.ventaMayorMonto();
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.softwarePinas.ProyectoBazar.service;
 
+import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
 import com.softwarePinas.ProyectoBazar.model.DetalleVenta;
 import com.softwarePinas.ProyectoBazar.model.Producto;
@@ -46,7 +47,7 @@ public class VentaService implements IVentaService {
 
     @Override
     public List<Producto> findProductosBySale(Long codigo_venta) {
-        Venta venta = ventaRepo.findById(codigo_venta).orElseThrow(null);
+        Venta venta = ventaRepo.findById(codigo_venta).orElseThrow(() -> new RuntimeException("Venta no encontrada. "));
         return venta.getListaDetalles()
                 .stream()
                 .map(DetalleVenta::getProducto)
@@ -65,6 +66,25 @@ public class VentaService implements IVentaService {
                 cantidadVentas,
                 montoTotal
         );
+    }
+
+    @Override
+    public MayorVentaDTO ventaMayorMonto() {
+        Venta venta = ventaRepo.findTopByOrderByTotalDesc()
+                .orElseThrow(()-> new RuntimeException("No existen ventas"));
+
+        int cantidadProductos = venta.getListaDetalles().stream()
+                .mapToInt(DetalleVenta::getCantidad)
+                .sum();
+
+        return new MayorVentaDTO(
+                venta.getCodigo_venta(),
+                venta.getTotal(),
+                cantidadProductos,
+                venta.getCliente().getNombre(),
+                venta.getCliente().getApellido()
+        );
+
     }
 
 }
