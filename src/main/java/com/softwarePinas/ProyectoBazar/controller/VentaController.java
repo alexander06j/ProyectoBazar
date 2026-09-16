@@ -1,7 +1,6 @@
 package com.softwarePinas.ProyectoBazar.controller;
 
-import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
+import com.softwarePinas.ProyectoBazar.dto.*;
 import com.softwarePinas.ProyectoBazar.model.Venta;
 import com.softwarePinas.ProyectoBazar.service.IVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,23 +20,23 @@ public class VentaController {
 
     //CREATE
     @PostMapping("/crear")
-    public ResponseEntity<Venta> addVenta(@RequestBody Venta venta){
-        ventaService.addVenta(venta);
-        return ResponseEntity.ok(venta);
+    public ResponseEntity<VentaConProductosDTO> addVenta(@RequestBody Venta venta){
+        VentaConProductosDTO dto = ventaService.crearVenta(venta);
+        return ResponseEntity.ok(dto);
     }
 
     //READ-ALL
     @GetMapping
-    public ResponseEntity<List<Venta>> getAllVentas(){
-        List<Venta> ventas = ventaService.ventaList();
+    public ResponseEntity<List<VentaDTO>> getAllVentas(){
+        List<VentaDTO> ventas = ventaService.ventaListDTO();
         return ResponseEntity.ok(ventas);
     }
 
     //READ-ONE
     @GetMapping("/{id}")
-    public ResponseEntity<Venta> getVentaById(@PathVariable Long id){
-        Optional<Venta> venta = ventaService.findVentaById(id);
-        return venta.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    public ResponseEntity<VentaDTO> getVentaById(@PathVariable Long id){
+        Optional<VentaDTO> venta = ventaService.findVentaDTOById(id);
+        return venta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //DELETE
@@ -65,9 +64,9 @@ public class VentaController {
     }
 
     @GetMapping("/productos/{codigo_venta}")
-    public Optional<Venta> getProductosBySale(@PathVariable Long codigo_venta){
-        Optional<Venta> ventas  = ventaService.findVentaById(codigo_venta);
-        return ventas;
+    public ResponseEntity<List<DetalleVentaDTO>> getProductosBySale(@PathVariable Long codigo_venta){
+        List<DetalleVentaDTO> productos = ventaService.getProductosDeVenta(codigo_venta);
+        return ResponseEntity.ok(productos);
     }
 
     @GetMapping("/fecha/{fecha_venta}")
