@@ -44,9 +44,21 @@ public class ClienteController {
     }
 
     //UPDATE
-    @PutMapping("/editar")
-    public void updateCliente(@RequestBody Cliente cliente){
-        clienteService.updateClient(cliente);
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<Cliente> updateCliente(@PathVariable Long id, @RequestBody Cliente cliente){
+        Optional<Cliente> clienteExistente = clienteService.findClientById(id);
+
+        if(clienteExistente.isPresent()){
+            Cliente actualizado = clienteExistente.get();
+            actualizado.setNombre(cliente.getNombre());
+            actualizado.setApellido(cliente.getApellido());
+            actualizado.setDni(cliente.getDni());
+
+            clienteService.updateClient(actualizado);
+            return ResponseEntity.ok(actualizado);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
