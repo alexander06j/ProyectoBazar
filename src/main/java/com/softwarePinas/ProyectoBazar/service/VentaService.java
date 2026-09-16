@@ -1,12 +1,12 @@
 package com.softwarePinas.ProyectoBazar.service;
 
-import com.softwarePinas.ProyectoBazar.dto.DetalleVentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
+import com.softwarePinas.ProyectoBazar.dto.*;
+import com.softwarePinas.ProyectoBazar.model.Cliente;
 import com.softwarePinas.ProyectoBazar.model.DetalleVenta;
 import com.softwarePinas.ProyectoBazar.model.Producto;
 import com.softwarePinas.ProyectoBazar.model.Venta;
+import com.softwarePinas.ProyectoBazar.repository.IClienteRepository;
+import com.softwarePinas.ProyectoBazar.repository.IProductoRepository;
 import com.softwarePinas.ProyectoBazar.repository.IVentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,12 @@ public class VentaService implements IVentaService {
 
     @Autowired
     private IVentaRepository ventaRepo;
+
+    @Autowired
+    private IClienteRepository clienteRepo;
+
+    @Autowired
+    private IProductoRepository productoRepo;
 
     @Override
     public Venta addVenta(Venta venta) {
@@ -133,5 +139,49 @@ public class VentaService implements IVentaService {
         }
         return Collections.emptyList();
     }
+
+    @Override
+    public VentaConProductosDTO crearVenta(Venta venta) {
+        // Recuperar cliente completo
+        Cliente cliente = clienteRepo.findById(venta.getCliente().getId_cliente())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
+        venta.setCliente(cliente);
+
+        // Vincular detalles con la venta y recuperar producto completo
+        for (DetalleVenta detalle : venta.getListaDetalles()) {
+            Producto producto = productoRepo.findById(detalle.getProducto().getCodigo_producto())
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+            detalle.setProducto(producto);
+            detalle.setVenta(venta);
+        }
+
+        // Guardar venta
+        Venta guardada = ventaRepo.save(venta);
+
+        // Calcular total
+        BigDecimal total = guardada.getListaDetalles().stream()
+                .map(DetalleVenta::getSubtotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Mapear a DTO
+        List<DetalleVentaDTO> productos = guardada.getListaDetalles().stream()
+                .map(d -> new DetalleVentaDTO(
+                        d.getProducto().getNombre(),
+                        d.getProducto().getMarca(),
+                        d.getCantidad(),
+                        d.getSubtotal()
+                ))
+                .collect(Collectors.toList());
+
+        return new VentaConProductosDTO(
+                guardada.getCodigo_venta(),
+                guardada.getFechaVenta(),
+                total,
+                guardada.getCliente().getNombre(),
+                guardada.getCliente().getApellido(),
+                productos
+        );
+    }
+
 
 }

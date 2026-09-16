@@ -1,9 +1,6 @@
 package com.softwarePinas.ProyectoBazar.controller;
 
-import com.softwarePinas.ProyectoBazar.dto.DetalleVentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
-import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
+import com.softwarePinas.ProyectoBazar.dto.*;
 import com.softwarePinas.ProyectoBazar.model.Venta;
 import com.softwarePinas.ProyectoBazar.service.IVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +20,9 @@ public class VentaController {
 
     //CREATE
     @PostMapping("/crear")
-    public ResponseEntity<Venta> addVenta(@RequestBody Venta venta){
-        ventaService.addVenta(venta);
-        return ResponseEntity.ok(venta);
+    public ResponseEntity<VentaConProductosDTO> addVenta(@RequestBody Venta venta){
+        VentaConProductosDTO dto = ventaService.crearVenta(venta);
+        return ResponseEntity.ok(dto);
     }
 
     //READ-ALL
