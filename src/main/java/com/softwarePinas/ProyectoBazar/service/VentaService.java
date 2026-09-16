@@ -1,5 +1,6 @@
 package com.softwarePinas.ProyectoBazar.service;
 
+import com.softwarePinas.ProyectoBazar.dto.DetalleVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -112,6 +114,24 @@ public class VentaService implements IVentaService {
                         v.getCliente().getNombre(),
                         v.getCliente().getApellido()
                 ));
+    }
+
+    @Override
+    public List<DetalleVentaDTO> getProductosDeVenta(Long codigoVenta) {
+        Optional<Venta> ventaOpt = ventaRepo.findById(codigoVenta);
+
+        if (ventaOpt.isPresent()) {
+            Venta venta = ventaOpt.get();
+            return venta.getListaDetalles().stream()
+                    .map(detalle -> new DetalleVentaDTO(
+                            detalle.getProducto().getNombre(),
+                            detalle.getProducto().getMarca(),
+                            detalle.getCantidad(),
+                            detalle.getSubtotal()
+                    ))
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
 }

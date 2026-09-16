@@ -1,5 +1,6 @@
 package com.softwarePinas.ProyectoBazar.service;
 
+import com.softwarePinas.ProyectoBazar.dto.DetalleVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
@@ -31,4 +32,6 @@ public interface IVentaService {
     public List<VentaDTO> ventaListDTO();
 
     public Optional<VentaDTO> findVentaDTOById(Long id);
+
+    public List<DetalleVentaDTO> getProductosDeVenta(Long codigoVenta);
 }

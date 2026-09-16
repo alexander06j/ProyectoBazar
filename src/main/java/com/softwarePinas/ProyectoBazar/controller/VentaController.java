@@ -1,5 +1,6 @@
 package com.softwarePinas.ProyectoBazar.controller;
 
+import com.softwarePinas.ProyectoBazar.dto.DetalleVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
@@ -66,9 +67,9 @@ public class VentaController {
     }
 
     @GetMapping("/productos/{codigo_venta}")
-    public Optional<Venta> getProductosBySale(@PathVariable Long codigo_venta){
-        Optional<Venta> ventas  = ventaService.findVentaById(codigo_venta);
-        return ventas;
+    public ResponseEntity<List<DetalleVentaDTO>> getProductosBySale(@PathVariable Long codigo_venta){
+        List<DetalleVentaDTO> productos = ventaService.getProductosDeVenta(codigo_venta);
+        return ResponseEntity.ok(productos);
     }
 
     @GetMapping("/fecha/{fecha_venta}")
