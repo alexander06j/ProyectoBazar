@@ -22,7 +22,7 @@ public class Producto {
     private String nombre;
     private String marca;
     private BigDecimal costo;
-    private Integer cantidad_disponible;
+    private Integer cantidadDisponible;
 
     @OneToMany(mappedBy = "producto")
     private List<DetalleVenta> listaDetalles;

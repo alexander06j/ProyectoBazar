@@ -19,7 +19,7 @@ public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long codigo_venta;
-    private LocalDate fecha_venta;
+    private LocalDate fechaVenta;
     private BigDecimal total;
 
     @ManyToOne
