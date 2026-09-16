@@ -47,9 +47,21 @@ public class VentaController {
     }
 
     //UPDATE
-    @PutMapping("/editar")
-    public void updateVenta(@RequestBody Venta venta){
-        ventaService.updateVenta(venta);
+    @PutMapping("/editar/{id}")
+    public ResponseEntity<Venta> updateVenta(@PathVariable Long id, @RequestBody Venta venta){
+        Optional<Venta> ventaExistente = ventaService.findVentaById(id);
+
+        if(ventaExistente.isPresent()){
+            Venta actualizada = ventaExistente.get();
+            actualizada.setFechaVenta(venta.getFechaVenta());
+            actualizada.setCliente(venta.getCliente());
+            actualizada.setListaDetalles(venta.getListaDetalles());
+
+            ventaService.updateVenta(actualizada);
+            return ResponseEntity.ok(actualizada);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/productos/{codigo_venta}")
