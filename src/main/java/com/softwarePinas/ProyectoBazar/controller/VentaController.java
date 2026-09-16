@@ -1,6 +1,7 @@
 package com.softwarePinas.ProyectoBazar.controller;
 
 import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
+import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
 import com.softwarePinas.ProyectoBazar.model.Venta;
 import com.softwarePinas.ProyectoBazar.service.IVentaService;
@@ -28,16 +29,16 @@ public class VentaController {
 
     //READ-ALL
     @GetMapping
-    public ResponseEntity<List<Venta>> getAllVentas(){
-        List<Venta> ventas = ventaService.ventaList();
+    public ResponseEntity<List<VentaDTO>> getAllVentas(){
+        List<VentaDTO> ventas = ventaService.ventaListDTO();
         return ResponseEntity.ok(ventas);
     }
 
     //READ-ONE
     @GetMapping("/{id}")
-    public ResponseEntity<Venta> getVentaById(@PathVariable Long id){
-        Optional<Venta> venta = ventaService.findVentaById(id);
-        return venta.map(ResponseEntity::ok).orElseGet(()-> ResponseEntity.notFound().build());
+    public ResponseEntity<VentaDTO> getVentaById(@PathVariable Long id){
+        Optional<VentaDTO> venta = ventaService.findVentaDTOById(id);
+        return venta.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     //DELETE

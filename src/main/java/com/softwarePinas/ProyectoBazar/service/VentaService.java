@@ -1,6 +1,7 @@
 package com.softwarePinas.ProyectoBazar.service;
 
 import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
+import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
 import com.softwarePinas.ProyectoBazar.model.DetalleVenta;
 import com.softwarePinas.ProyectoBazar.model.Producto;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class VentaService implements IVentaService {
@@ -85,6 +87,31 @@ public class VentaService implements IVentaService {
                 venta.getCliente().getApellido()
         );
 
+    }
+
+    @Override
+    public List<VentaDTO> ventaListDTO() {
+        return ventaRepo.findAll().stream()
+                .map(v -> new VentaDTO(
+                        v.getCodigo_venta(),
+                        v.getFechaVenta(),
+                        v.getTotal(),
+                        v.getCliente().getNombre(),
+                        v.getCliente().getApellido()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<VentaDTO> findVentaDTOById(Long id) {
+        return ventaRepo.findById(id)
+                .map(v -> new VentaDTO(
+                        v.getCodigo_venta(),
+                        v.getFechaVenta(),
+                        v.getTotal(),
+                        v.getCliente().getNombre(),
+                        v.getCliente().getApellido()
+                ));
     }
 
 }

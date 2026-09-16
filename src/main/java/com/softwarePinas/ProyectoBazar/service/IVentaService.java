@@ -1,6 +1,7 @@
 package com.softwarePinas.ProyectoBazar.service;
 
 import com.softwarePinas.ProyectoBazar.dto.MayorVentaDTO;
+import com.softwarePinas.ProyectoBazar.dto.VentaDTO;
 import com.softwarePinas.ProyectoBazar.dto.VentaPorFechaDTO;
 import com.softwarePinas.ProyectoBazar.model.Producto;
 import com.softwarePinas.ProyectoBazar.model.Venta;
@@ -26,4 +27,8 @@ public interface IVentaService {
     public VentaPorFechaDTO ventasPorFecha(LocalDate fecha_venta);
 
     public MayorVentaDTO ventaMayorMonto();
+
+    public List<VentaDTO> ventaListDTO();
+
+    public Optional<VentaDTO> findVentaDTOById(Long id);
 }
